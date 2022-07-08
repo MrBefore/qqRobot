@@ -81,8 +81,8 @@ public class StringUseUtils {
      * @param str String
      * @return List
      */
-    public static List<String> getListStr(String str) {
-        String[] list = str.split(",");
+    public static List<String> getListStr(String str, String split) {
+        String[] list = str.split(split);
         return Arrays.asList(list);
     }
 

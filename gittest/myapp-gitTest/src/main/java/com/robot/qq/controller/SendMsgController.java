@@ -5,10 +5,7 @@ import com.robot.qq.entity.ReqResult;
 import com.robot.qq.enums.MsgTypeEnum;
 import com.robot.qq.service.SendToGroupService;
 import com.robot.qq.service.SendToUserService;
-import com.robot.qq.util.DiscUtils;
-import com.robot.qq.util.FoodUtils;
-import com.robot.qq.util.TextToImageUtil;
-import com.robot.qq.util.VacationUtils;
+import com.robot.qq.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -119,7 +116,7 @@ public class SendMsgController {
      * @throws Exception Exception
      */
     @PostMapping("/food")
-    public ReqResult test(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
+    public ReqResult food(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
         message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
         String mqMsg = message.getMqMsg();
         //消息类型为：好友或群聊时：
@@ -128,6 +125,29 @@ public class SendMsgController {
         if (isMatch) {
             String food = FoodUtils.getRandomFood();
             return getReqResult(message, food);
+        } else {
+            return new ReqResult(1);
+        }
+    }
+
+    /**
+     * 苏联笑话
+     *
+     * @param message CallbackMsg 回调信息
+     * @param request request请求
+     * @return ReqResult 统一出参
+     * @throws Exception Exception
+     */
+    @PostMapping("/jock")
+    public ReqResult jock(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
+        message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
+        String mqMsg = message.getMqMsg();
+        //消息类型为：好友或群聊时：
+        String flag = "苏联笑话：.*";
+        boolean isMatch = Pattern.matches(flag, mqMsg);
+        if (isMatch) {
+            String jock = JokeUtils.getJoke(mqMsg);
+            return getReqResult(message, jock);
         } else {
             return new ReqResult(1);
         }
