@@ -57,7 +57,7 @@ public class VacationUtils {
      *
      * @return Author：YCM 2017年2月7日 下午2:45:33
      */
-    private static String calcEffectiveDate() throws ParseException {
+    public static String calcEffectiveDate() throws ParseException {
         return calcEffectiveDateUtil(true);
     }
 

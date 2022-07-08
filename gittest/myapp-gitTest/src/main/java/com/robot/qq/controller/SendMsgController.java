@@ -6,6 +6,7 @@ import com.robot.qq.enums.MsgTypeEnum;
 import com.robot.qq.service.SendToGroupService;
 import com.robot.qq.service.SendToUserService;
 import com.robot.qq.util.DiscUtils;
+import com.robot.qq.util.FoodUtils;
 import com.robot.qq.util.TextToImageUtil;
 import com.robot.qq.util.VacationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,6 +82,52 @@ public class SendMsgController {
         if (isMatch) {
             String disc = DiscUtils.getOneDice(mqMsg);
             return getReqResult(message, disc);
+        } else {
+            return new ReqResult(1);
+        }
+    }
+
+    /**
+     * 摸鱼提示
+     *
+     * @param message CallbackMsg 回调信息
+     * @param request request请求
+     * @return ReqResult 统一出参
+     * @throws Exception Exception
+     */
+    @PostMapping("/moYu")
+    public ReqResult moYu(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
+        message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
+        String mqMsg = message.getMqMsg();
+        //消息类型为：好友或群聊时：
+        String flag = "摸鱼";
+        String str = VacationUtils.calcEffectiveDateNoPhoto();
+        boolean isMatch = flag.equals(mqMsg);
+        if (isMatch) {
+            return getReqResult(message, str);
+        } else {
+            return new ReqResult(1);
+        }
+    }
+
+    /**
+     * xx吃啥
+     *
+     * @param message CallbackMsg 回调信息
+     * @param request request请求
+     * @return ReqResult 统一出参
+     * @throws Exception Exception
+     */
+    @PostMapping("/food")
+    public ReqResult test(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
+        message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
+        String mqMsg = message.getMqMsg();
+        //消息类型为：好友或群聊时：
+        String flag = ".*吃啥";
+        boolean isMatch = Pattern.matches(flag, mqMsg);
+        if (isMatch) {
+            String food = FoodUtils.getRandomFood();
+            return getReqResult(message, food);
         } else {
             return new ReqResult(1);
         }

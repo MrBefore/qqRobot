@@ -65,31 +65,6 @@ public class SendImageController {
     }
 
     /**
-     * 摸鱼提示图片
-     *
-     * @param message CallbackMsg 回调信息
-     * @param request request请求
-     * @return ReqResult 统一出参
-     * @throws Exception Exception
-     */
-    @PostMapping("/moYu")
-    public ReqResult moYu(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
-        message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
-        String mqMsg = message.getMqMsg();
-        //消息类型为：好友或群聊时：
-        String flag = "摸鱼";
-        String str = VacationUtils.calcEffectiveDateNoPhoto();
-        boolean isMatch = flag.equals(mqMsg);
-        if (isMatch) {
-            TextToImageUtil.createImage(str);
-            String fileUrl = "D:/Photo/moYu/0.jpg";
-            return getReqResult(message, fileUrl);
-        } else {
-            return new ReqResult(1);
-        }
-    }
-
-    /**
      * 摸鱼办图片
      *
      * @param message CallbackMsg 回调信息
@@ -110,7 +85,7 @@ public class SendImageController {
             String today = sdf.format(new Date());
             url = url + today + ".png";
             String fileUrl = "D:/Photo/moYuMan/666.png";
-//            ImageUtil.saveImage(url, fileUrl);
+            ImageUtil.saveImage(url, fileUrl);
             return getReqResult(message, fileUrl);
         } else {
             return new ReqResult(1);
