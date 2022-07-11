@@ -1,9 +1,12 @@
 package com.robot.qq.controller;
 
+import com.robot.qq.annotation.Controllable;
 import com.robot.qq.common.TemplateUtil;
 import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.enums.MsgTypeEnum;
+import com.robot.qq.enums.TagEnum;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +23,8 @@ import java.util.Map;
  * @author wangzk
  */
 @RequestMapping("/msg")
+@RestController
+@Controllable(tag = TagEnum.BASE_FUNCTION) // 默认启用
 public class MsgController {
 
     private final TemplateUtil xsTemplate;
@@ -29,6 +34,7 @@ public class MsgController {
     }
 
     @PostMapping
+    @Controllable
     public ReqResult newMsg(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
         message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "UTF-8"));
         String mqMsg = message.getMqMsg();
@@ -46,6 +52,13 @@ public class MsgController {
                 System.out.println(friendsMap);
             }
         }
+        return new ReqResult(1);
+    }
+
+    @GetMapping("/hello")
+    @Controllable(0) // 禁用
+    public ReqResult test(CallbackMsg message, HttpServletRequest request){
+        System.out.println("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
         return new ReqResult(1);
     }
 
