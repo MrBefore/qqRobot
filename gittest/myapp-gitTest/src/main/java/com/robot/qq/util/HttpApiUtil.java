@@ -20,6 +20,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -100,7 +101,7 @@ public final class HttpApiUtil {
             sb.append("http://").append(host).append(":")
                     .append(port).append("/MyQQHTTPAPI");
             HttpPost postRequest = new HttpPost(sb.toString());
-            StringEntity entity = new StringEntity(json, Charset.forName("GBK"));
+            StringEntity entity = new StringEntity(json, StandardCharsets.UTF_8);
             // 发送Json格式的数据请求
             entity.setContentType("application/json");
             postRequest.setEntity(entity);
