@@ -1,5 +1,6 @@
 package com.robot.qq.controller;
 
+import com.robot.qq.annotation.Controllable;
 import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.enums.MsgTypeEnum;
@@ -24,6 +25,7 @@ import java.util.regex.Pattern;
 
 @RequestMapping("/sendMsg")
 @RestController
+@Controllable
 public class SendMsgController {
     @Autowired
     private SendToUserService toUserService;

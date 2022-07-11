@@ -6,6 +6,8 @@ import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.enums.MsgTypeEnum;
 import com.robot.qq.enums.TagEnum;
+import com.robot.qq.util.SpringBeanUtils;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +15,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.net.URLDecoder;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -56,9 +64,17 @@ public class MsgController {
     }
 
     @GetMapping("/hello")
-    @Controllable(0) // 禁用
-    public ReqResult test(CallbackMsg message, HttpServletRequest request){
+    @Controllable
+    public ReqResult hello(CallbackMsg message, HttpServletRequest request){
         System.out.println("哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈");
+        return new ReqResult(1);
+    }
+
+
+    @GetMapping("/world")
+    @Controllable
+    public ReqResult world(CallbackMsg message, HttpServletRequest request){
+        System.out.println("呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵呵");
         return new ReqResult(1);
     }
 

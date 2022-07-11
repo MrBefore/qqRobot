@@ -1,5 +1,6 @@
 package com.robot.qq.controller;
 
+import com.robot.qq.annotation.Controllable;
 import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.enums.MsgTypeEnum;
@@ -7,8 +8,6 @@ import com.robot.qq.service.SendToGroupService;
 import com.robot.qq.service.SendToUserService;
 import com.robot.qq.util.GetCatUtils;
 import com.robot.qq.util.ImageUtil;
-import com.robot.qq.util.TextToImageUtil;
-import com.robot.qq.util.VacationUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +28,7 @@ import java.util.regex.Pattern;
 
 @RequestMapping("/sendImage")
 @RestController
+@Controllable
 public class SendImageController {
     @Autowired
     private SendToUserService toUserService;
