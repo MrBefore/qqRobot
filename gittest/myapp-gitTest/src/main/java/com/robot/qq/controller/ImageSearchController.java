@@ -1,5 +1,6 @@
 package com.robot.qq.controller;
 
+import com.robot.qq.annotation.Controllable;
 import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.service.SearchService;
@@ -20,6 +21,7 @@ import java.net.URLDecoder;
  */
 @RequestMapping("/search")
 @RestController
+@Controllable
 public class ImageSearchController {
 
     @Autowired
