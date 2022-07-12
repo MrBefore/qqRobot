@@ -5,9 +5,7 @@ import com.robot.qq.entity.CallbackMsg;
 import com.robot.qq.entity.ReqResult;
 import com.robot.qq.service.ManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -22,8 +20,9 @@ import java.net.URLDecoder;
 public class ManagementController {
     @Autowired
     ManagementService managementService;
-    @GetMapping("/control")
-    public ReqResult searchImage(CallbackMsg message, HttpServletRequest request) throws Exception {
+
+    @PostMapping("/control")
+    public ReqResult searchImage(@RequestBody CallbackMsg message, HttpServletRequest request) throws Exception {
         message.setMqMsg(URLDecoder.decode(message.getMqMsg(), "utf-8"));
         return managementService.control(message);
     }
