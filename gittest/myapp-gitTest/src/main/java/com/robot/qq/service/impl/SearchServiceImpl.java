@@ -75,7 +75,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void search(CallbackMsg message) {
         if (Pattern.matches(REGEX_SEARCH, message.getMqMsg())) {
-            String url = this.getImage(message.getMqMsg());
+            String url = this.getImageFromVilipix(message.getMqMsg());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
             String now = sdf.format(new Date());
             if (message.getMqType().equals(MsgTypeEnum.MSG_TYPE_RRI_EDN.getCode()) || message.getMqType().equals(MsgTypeEnum.MSG_TYPE_GROUP.getCode())) {
@@ -95,6 +95,39 @@ public class SearchServiceImpl implements SearchService {
             }
         }
     }
+
+    /**
+     * 从Vilipix获取图片
+     * @param mqMsg 关键词
+     * @return 图片url
+     */
+    private String getImageFromVilipix(String mqMsg) {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 关键字
+        String keyWord = mqMsg.replaceAll(KEY_WORD_PREFIX, "");
+        HttpGet httpGet = new HttpGet("https://www.vilipix.com/api/v1/picture/public?limit=50&tags="+ keyWord +"&offset=0");
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+        String html = null;
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpGet)) {
+            HttpEntity httpEntity = httpResponse.getEntity();
+            html = EntityUtils.toString(httpEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // url匹配规则
+        String REGEX_PIXIV_IMAGE = "\"original_url\":\"[a-zA-z]+://[^\\s\"]*";
+        Pattern pattern = Pattern.compile(REGEX_PIXIV_IMAGE);
+        assert html != null;
+        Matcher matcher = pattern.matcher(html);
+        List<String> urls = new ArrayList<>();
+        while (matcher.find()) {
+            urls.add(matcher.group().replace("\"original_url\":\"", ""));
+        }
+        // 返回随机图片
+        Random random = new Random();
+        return urls.get(random.nextInt(urls.size() - 1));
+    }
+
 
     /**
      * 从百度获取图片
