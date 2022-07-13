@@ -110,7 +110,6 @@ public class SearchServiceImpl implements SearchService {
         Random random = new Random();
         // 关键字
         String keyWord = mqMsg.replaceAll(KEY_WORD_PREFIX, "");
-//        String keyWord = "伊莉雅";
         String page = "1";
         HttpPost httpPost = new HttpPost("https://rt.huashi6.com/search/all");
         List<NameValuePair> nameValuePairs = new ArrayList<>();
@@ -170,7 +169,8 @@ public class SearchServiceImpl implements SearchService {
             urls.add(matcher.group().replace("\"originalPath\":\"", ""));
         }
         // 返回随机图片
-        return  "https://img2.huashi6.com/" + urls.get(random.nextInt(urls.size() - 1));
+        String defaultUrl = "https://img2.huashi6.com/images/resource/thumbnail/2022/01/08/232940_78000066373.jpg";
+        return urls.size() < 1 ? defaultUrl : "https://img2.huashi6.com/" + urls.get(random.nextInt(urls.size() - 1));
     }
 
     /**
