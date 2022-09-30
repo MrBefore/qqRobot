@@ -30,8 +30,8 @@ public class VacationUtils {
         map.put("清明节", "2023-04-05");
         map.put("劳动节", "2023-04-30");
         map.put("端午节", "2023-06-22");
-        map.put("中秋节", "2022-09-10");
-        map.put("国庆节", "2022-10-01");
+        map.put("中秋节", "2023-09-29");
+        map.put("国庆节", "2023-10-01");
         map.put("元旦", "2023-01-01");
     }
 
@@ -42,9 +42,9 @@ public class VacationUtils {
         money.put("四月", "2023-04-30");
         money.put("五月", "2023-05-30");
         money.put("六月", "2023-06-30");
-        money.put("七月", "2022-07-30");
-        money.put("八月", "2022-08-30");
-        money.put("九月", "2022-09-30");
+        money.put("七月", "2023-07-30");
+        money.put("八月", "2023-08-30");
+        money.put("九月", "2023-09-30");
         money.put("十月", "2022-10-30");
         money.put("十一月", "2022-11-30");
         money.put("十二月", "2022-12-30");
@@ -57,7 +57,7 @@ public class VacationUtils {
      *
      * @return Author：YCM 2017年2月7日 下午2:45:33
      */
-    public static String calcEffectiveDate() throws ParseException {
+    private static String calcEffectiveDate() throws ParseException {
         return calcEffectiveDateUtil(true);
     }
 
@@ -212,11 +212,13 @@ public class VacationUtils {
      */
     private static Integer getDaysBySecondForHour() throws ParseException {
         Date nowDate = new Date();
+        int num;
         SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd hh:mm:ss");
         String nowDays = sdf.format(nowDate);
-        String now = nowDays.substring(0, 9) + "18:00:00";
+        String now = nowDays.substring(0, 9) + "17:00:00";
         Date date = sdf.parse(now);
-        return (int) ((date.getTime() - nowDate.getTime()) / (1000 * 3600));
+        num = Math.round(date.getTime() - nowDate.getTime()) / (1000 * 3600);
+        return num;
     }
 
     /**

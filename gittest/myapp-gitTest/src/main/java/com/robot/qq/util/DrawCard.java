@@ -1,5 +1,9 @@
 package com.robot.qq.util;
 
+import lombok.extern.slf4j.Slf4j;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Scanner;
 
 /**
@@ -7,6 +11,7 @@ import java.util.Scanner;
  *
  * @author wangzk
  */
+@Slf4j
 public class DrawCard {
 
     /**
@@ -48,7 +53,34 @@ public class DrawCard {
         }
     }
 
+    /**
+     * 计算环比变化
+     *
+     * @param num1 String
+     * @param num2 String
+     * @return String
+     */
+    private static String getRoundPercent(String num1, String num2) {
+        try {
+            //接受字符串类型的百分数
+            NumberFormat nf = NumberFormat.getPercentInstance();
+            //保留两位小数
+            nf.setMaximumFractionDigits(2);
+            //将double类型的量转化为字符串输出
+            DecimalFormat df = new DecimalFormat("#0.00%");
+            //用NumberFormat的parse方法和doubleValue方法将字符串百分数转换为double类型的可计算数值
+            double round = (nf.parse(num1).doubleValue() - nf.parse(num2).doubleValue()) / nf.parse(num2).doubleValue();
+            //再将double转为String输出
+            return df.format(round);
+        } catch (Exception e) {
+            log.info("计算环比变化率出现异常", e);
+            return "0.00%";
+        }
+    }
+
+
     public static void main(String[] args) {
-        drop();
+        String round = getRoundPercent("2.57%", "50.24%");
+        System.out.println(round);
     }
 }
