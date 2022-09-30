@@ -7,16 +7,20 @@ import com.robot.qq.service.SendToGroupService;
 import com.robot.qq.service.SendToUserService;
 import com.robot.qq.util.ImageUtil;
 import org.apache.http.HttpEntity;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +79,7 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public void search(CallbackMsg message) {
         if (Pattern.matches(REGEX_SEARCH, message.getMqMsg())) {
-            String url = this.getImageFromVilipix(message.getMqMsg());
+            String url = this.getImageFromHuashi(message.getMqMsg());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd-HHmmss");
             String now = sdf.format(new Date());
             if (message.getMqType().equals(MsgTypeEnum.MSG_TYPE_RRI_EDN.getCode()) || message.getMqType().equals(MsgTypeEnum.MSG_TYPE_GROUP.getCode())) {
@@ -97,37 +101,77 @@ public class SearchServiceImpl implements SearchService {
     }
 
     /**
-     * 从Vilipix获取图片
+     * 从rt.huashi6.com获取图片
      * @param mqMsg 关键词
      * @return 图片url
      */
-    private String getImageFromVilipix(String mqMsg) {
+    private String getImageFromHuashi(String mqMsg) {
         CloseableHttpClient httpClient = HttpClients.createDefault();
+        Random random = new Random();
         // 关键字
         String keyWord = mqMsg.replaceAll(KEY_WORD_PREFIX, "");
-        HttpGet httpGet = new HttpGet("https://www.vilipix.com/api/v1/picture/public?limit=50&tags="+ keyWord +"&offset=0");
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
+        String page = "1";
+        HttpPost httpPost = new HttpPost("https://rt.huashi6.com/search/all");
+        List<NameValuePair> nameValuePairs = new ArrayList<>();
+        nameValuePairs.add(new BasicNameValuePair("word", keyWord));
+        nameValuePairs.add(new BasicNameValuePair("index", page));
+        UrlEncodedFormEntity urlEncodedFormEntity = null;
+        try {
+            urlEncodedFormEntity = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        httpPost.setEntity(urlEncodedFormEntity);
+        httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36");
         String html = null;
-        try (CloseableHttpResponse httpResponse = httpClient.execute(httpGet)) {
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpPost)) {
+            HttpEntity httpEntity = httpResponse.getEntity();
+            html = EntityUtils.toString(httpEntity);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Pattern pagePattern = Pattern.compile("\"pageCount\":[0-9]*");
+        assert html != null;
+        Matcher matcher1 = pagePattern.matcher(html);
+        int index = 1;
+        // 获取总页数并随机选取一页
+        if (matcher1.find()){
+            try {
+                page = matcher1.group().replace("\"pageCount\":", "");
+                index = random.nextInt(Integer.parseInt(page));
+            } catch (NumberFormatException e) {
+                index = 1;
+            }
+        }
+        // 再次发送请求获取图片
+        nameValuePairs.clear();
+        nameValuePairs.add(new BasicNameValuePair("index", index + ""));
+        nameValuePairs.add(new BasicNameValuePair("word", keyWord));
+        UrlEncodedFormEntity urlEncodedFormEntity1 = null;
+        try {
+            urlEncodedFormEntity1 = new UrlEncodedFormEntity(nameValuePairs, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        httpPost.setEntity(urlEncodedFormEntity1);
+        try (CloseableHttpResponse httpResponse = httpClient.execute(httpPost)) {
             HttpEntity httpEntity = httpResponse.getEntity();
             html = EntityUtils.toString(httpEntity);
         } catch (Exception e) {
             e.printStackTrace();
         }
         // url匹配规则
-        String REGEX_PIXIV_IMAGE = "\"original_url\":\"[a-zA-z]+://[^\\s\"]*";
-        Pattern pattern = Pattern.compile(REGEX_PIXIV_IMAGE);
+        Pattern pattern = Pattern.compile("\"originalPath\":\"[^\\s\"]*");
         assert html != null;
         Matcher matcher = pattern.matcher(html);
         List<String> urls = new ArrayList<>();
         while (matcher.find()) {
-            urls.add(matcher.group().replace("\"original_url\":\"", ""));
+            urls.add(matcher.group().replace("\"originalPath\":\"", ""));
         }
         // 返回随机图片
-        Random random = new Random();
-        return urls.get(random.nextInt(urls.size() - 1));
+        String defaultUrl = "https://img2.huashi6.com/images/resource/thumbnail/2022/01/08/232940_78000066373.jpg";
+        return urls.size() < 1 ? defaultUrl : "https://img2.huashi6.com/" + urls.get(random.nextInt(urls.size() - 1));
     }
-
 
     /**
      * 从百度获取图片
