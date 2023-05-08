@@ -26,28 +26,28 @@ public class VacationUtils {
     private static HashMap<String, String> money = new HashMap<>();
 
     static {
-        map.put("春节", "2023-01-22");
-        map.put("清明节", "2023-04-05");
-        map.put("劳动节", "2023-04-30");
+        map.put("春节", "2024-02-09");
+        map.put("清明节", "2024-04-04");
+        map.put("劳动节", "2024-04-30");
         map.put("端午节", "2023-06-22");
         map.put("中秋节", "2023-09-29");
-        map.put("国庆节", "2023-10-01");
-        map.put("元旦", "2023-01-01");
+        map.put("国庆节", "2023-09-29");
+        map.put("元旦", "2024-01-01");
     }
 
     static {
-        money.put("一月", "2023-01-30");
-        money.put("二月", "2023-02-28");
-        money.put("三月", "2023-03-30");
-        money.put("四月", "2023-04-30");
+        money.put("一月", "2024-01-30");
+        money.put("二月", "2024-03-01");
+        money.put("三月", "2024-03-30");
+        money.put("四月", "2024-04-30");
         money.put("五月", "2023-05-30");
         money.put("六月", "2023-06-30");
         money.put("七月", "2023-07-30");
         money.put("八月", "2023-08-30");
         money.put("九月", "2023-09-30");
-        money.put("十月", "2022-10-30");
-        money.put("十一月", "2022-11-30");
-        money.put("十二月", "2022-12-30");
+        money.put("十月", "2023-10-30");
+        money.put("十一月", "2023-11-30");
+        money.put("十二月", "2023-12-30");
     }
 
     /**
@@ -215,7 +215,7 @@ public class VacationUtils {
         int num;
         SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd hh:mm:ss");
         String nowDays = sdf.format(nowDate);
-        String now = nowDays.substring(0, 9) + "17:00:00";
+        String now = nowDays.substring(0, 9) + "18:00:00";
         Date date = sdf.parse(now);
         num = Math.round(date.getTime() - nowDate.getTime()) / (1000 * 3600);
         return num;
