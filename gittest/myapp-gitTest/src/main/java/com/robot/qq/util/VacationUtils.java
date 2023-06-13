@@ -40,7 +40,7 @@ public class VacationUtils {
         money.put("二月", "2024-03-01");
         money.put("三月", "2024-03-30");
         money.put("四月", "2024-04-30");
-        money.put("五月", "2023-05-30");
+        money.put("五月", "2024-05-30");
         money.put("六月", "2023-06-30");
         money.put("七月", "2023-07-30");
         money.put("八月", "2023-08-30");
