@@ -19,8 +19,8 @@ public class StringUseUtils {
      * @param s2 List
      * @return List
      */
-    private static List<Object> getMaxList(List<Object> s1, List<Object> s2) {
-        List<Object> allList = new ArrayList<>();
+    private static List<Long> getMaxList(List<Long> s1, List<Long> s2) {
+        List<Long> allList = new ArrayList<>();
         allList.addAll(s1);
         allList.addAll(s2);
         return allList.stream().distinct().collect(Collectors.toList());
@@ -126,7 +126,28 @@ public class StringUseUtils {
      * @param args String
      */
     public static void main(String[] args) {
-        System.out.println();
+        // 原
+        List<Long> list1 = new ArrayList<>();
+        list1.add(1L);
+        list1.add(2L);
+        list1.add(3L);
+        list1.add(5L);
+        // 新
+        List<Long> list2 = new ArrayList<>();
+        list1.add(2L);
+        list1.add(3L);
+        // 删除全部，然后全部新增
+        if (list1.size() > list2.size()) {
+
+        }
+        // 增
+        // 不动
+
+
+        List<Long> list = getMaxList(list1, list2);
+
+
+        System.out.println(list);
     }
 
 

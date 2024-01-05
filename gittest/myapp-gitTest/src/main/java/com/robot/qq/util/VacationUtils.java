@@ -29,10 +29,10 @@ public class VacationUtils {
         map.put("春节", "2024-02-09");
         map.put("清明节", "2024-04-04");
         map.put("劳动节", "2024-04-30");
-        map.put("端午节", "2023-06-22");
-        map.put("中秋节", "2023-09-29");
-        map.put("国庆节", "2023-09-29");
-        map.put("元旦", "2024-01-01");
+        map.put("端午节", "2024-06-09");
+        map.put("中秋节", "2024-09-16");
+        map.put("国庆节", "2024-09-30");
+        map.put("元旦", "2024-12-31");
     }
 
     static {
@@ -41,13 +41,13 @@ public class VacationUtils {
         money.put("三月", "2024-03-30");
         money.put("四月", "2024-04-30");
         money.put("五月", "2024-05-30");
-        money.put("六月", "2023-06-30");
-        money.put("七月", "2023-07-30");
-        money.put("八月", "2023-08-30");
-        money.put("九月", "2023-09-30");
-        money.put("十月", "2023-10-30");
-        money.put("十一月", "2023-11-30");
-        money.put("十二月", "2023-12-30");
+        money.put("六月", "2024-06-30");
+        money.put("七月", "2024-07-30");
+        money.put("八月", "2024-08-30");
+        money.put("九月", "2024-09-30");
+        money.put("十月", "2024-10-30");
+        money.put("十一月", "2024-11-30");
+        money.put("十二月", "2024-12-30");
     }
 
     /**
@@ -87,7 +87,7 @@ public class VacationUtils {
         HashMap<String, Integer> dayMap = new HashMap<>(10);
         HashMap<String, Integer> moneyMap = new HashMap<>(10);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat nowDaySdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat nowDaySdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         map.forEach((key, value) -> {
             try {
                 Date vacationDate = sdf.parse(value);
@@ -213,7 +213,7 @@ public class VacationUtils {
     private static Integer getDaysBySecondForHour() throws ParseException {
         Date nowDate = new Date();
         int num;
-        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd hh:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yy:MM:dd HH:mm:ss");
         String nowDays = sdf.format(nowDate);
         String now = nowDays.substring(0, 9) + "18:00:00";
         Date date = sdf.parse(now);

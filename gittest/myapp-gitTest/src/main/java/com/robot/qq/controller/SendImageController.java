@@ -80,7 +80,7 @@ public class SendImageController {
         String flag = "摸鱼人";
         boolean isMatch = flag.equals(mqMsg);
         if (isMatch) {
-            String url = "https://api.j4u.ink/proxy/redirect/moyu/calendar/";
+            String url = " https://api.j4u.ink/proxy/redirect/moyu/calendar/";
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             String today = sdf.format(new Date());
             url = url + today + ".png";

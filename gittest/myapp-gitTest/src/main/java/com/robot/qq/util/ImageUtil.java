@@ -6,6 +6,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 保存远程图片工具类
@@ -84,6 +86,16 @@ public class ImageUtil {
         }
         inStream.close();
         return outStream.toByteArray();
+    }
+
+
+    public static void main(String[] args) {
+        String url = " https://api.j4u.ink/proxy/redirect/moyu/calendar/";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String today = sdf.format(new Date());
+        url = url + today + ".png";
+        String fileUrl = "D:/Photo/moYuMan/666.png";
+        ImageUtil.saveImage(url, fileUrl);
     }
 
 }
